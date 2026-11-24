@@ -1,7 +1,7 @@
-# API Acadêmica — Capítulo 5
+# API Acadêmica — Capítulo 6
 
-## Testes negativos e valores-limite
+## Automação com Insomnia
 
-Exercite POST e PUT com nomes de 2, 3, 100 e 101 caracteres, formato de e-mail inválido e RA duplicado. Compare o status e o corpo das respostas.
+Importe `insomnia.json`, inicie a API e execute a coleção no Collection Runner. Os testes de disponibilidade e listagem ficam em Scripts → After-response.
 
 Instale as dependências com `npm ci` e execute `node app.js`. A API atende em `http://127.0.0.1:3000`.

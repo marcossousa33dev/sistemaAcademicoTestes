@@ -1,0 +1,38 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "resources": [
+    {
+      "_id": "wrk_uc11",
+      "_type": "workspace",
+      "name": "API Acadêmica – Capítulo 6",
+      "scope": "collection"
+    },
+    {
+      "_id": "req_health",
+      "_type": "request",
+      "parentId": "wrk_uc11",
+      "name": "Verificar servidor",
+      "method": "GET",
+      "url": "http://127.0.0.1:3000/api/health",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "afterResponseScript": "insomnia.test(\"Resposta da API\", () => {\n  insomnia.expect(insomnia.response.code).to.eql(200);\n  insomnia.expect(insomnia.response.json().status).to.eql(\"ok\");\n});"
+    },
+    {
+      "_id": "req_alunos",
+      "_type": "request",
+      "parentId": "wrk_uc11",
+      "name": "Listar alunos",
+      "method": "GET",
+      "url": "http://127.0.0.1:3000/api/alunos",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "afterResponseScript": "insomnia.test(\"Resposta da API\", () => {\n  insomnia.expect(insomnia.response.code).to.eql(200);\n  const alunos = insomnia.response.json();\n  insomnia.expect(alunos).to.be.an(\"array\");\n  alunos.forEach(aluno => insomnia.expect(aluno).to.include.keys(\"id\", \"ra\", \"nome\", \"email\", \"curso\"));\n});"
+    }
+  ]
+}
