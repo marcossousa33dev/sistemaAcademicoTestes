@@ -1,8 +1,8 @@
-# API Acadêmica — Capítulo 12
+# API Acadêmica — Capítulo 13
 
-## Estresse e recuperação
+## Depuração de parâmetros de rota
 
-Com a API local em execução, execute `k6 run test/k6/estresse-controlado.js` e registre os resultados da atividade.
+Coloque um breakpoint na conversão do ID na rota de consulta. Com um token de leitor, consulte /api/alunos/1 e /api/alunos/abc. Compare req.params.id, o resultado de Number() e o status HTTP. Registre o comportamento antes de propor uma correção.
 
 Instale as dependências com `npm ci` e execute `node app.js`. A API atende em `http://127.0.0.1:3000`.
 
