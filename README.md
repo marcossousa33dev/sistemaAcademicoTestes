@@ -1,8 +1,8 @@
-# API Acadêmica — Capítulo 10
+# API Acadêmica — Capítulo 11
 
-## Carga básica
+## Carga autenticada
 
-Com a API local em execução, execute `k6 run test/k6/carga-basica.js` e registre os resultados da atividade.
+Defina a variável de ambiente K6_SENHA_LEITOR com a senha didática do leitor. Com a API local em execução, execute `k6 run test/k6/carga-autenticada.js` e registre os resultados da atividade.
 
 Instale as dependências com `npm ci` e execute `node app.js`. A API atende em `http://127.0.0.1:3000`.
 
