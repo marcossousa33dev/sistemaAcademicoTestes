@@ -1,7 +1,7 @@
-# API Acadêmica — Capítulo 6
+# API Acadêmica — Capítulo 7
 
-## Automação com Insomnia
+## Auditoria preliminar
 
-Importe `insomnia.json`, inicie a API e execute a coleção no Collection Runner. Os testes de disponibilidade e listagem ficam em Scripts → After-response.
+Liste cada operação do CRUD e registre quem deveria poder executá-la. Para cada rota, anote os dados envolvidos, a permissão esperada e o resultado observado. Guarde essa matriz para comparar com a versão do capítulo 8.
 
 Instale as dependências com `npm ci` e execute `node app.js`. A API atende em `http://127.0.0.1:3000`.
