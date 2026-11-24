@@ -23,6 +23,24 @@ const app = express();
 // Define a porta utilizada pelo servidor.
 const PORT = 3000;
 
+// Carrega as variáveis de ambiente.
+require('dotenv').config();
+
+// Importa funções de segurança.
+const {
+  login,
+  autenticar,
+  autorizar
+} = require('./auth');
+
+// Confere a configuração obrigatória.
+if (!process.env.JWT_SECRET ||
+    process.env.JWT_SECRET.length < 32) {
+  throw new Error(
+    'Configure uma JWT_SECRET segura no arquivo .env'
+  );
+}
+
 /*
  * MIDDLEWARE
  *
@@ -152,6 +170,17 @@ app.get('/api/health', (req, res) => {
 });
 
 /*
+ * Endpoint público de autenticação.
+ */
+app.post('/api/auth/login', login);
+
+/*
+ * Exige autenticação em todas
+ * as rotas de /api/alunos.
+ */
+app.use('/api/alunos', autenticar);
+
+/*
  * ENDPOINT 02 - LISTAR ALUNOS
  *
  * Método: GET
@@ -243,7 +272,7 @@ app.get('/api/alunos/:id', (req, res) => {
  * HTTP 400 - Dados inválidos
  * HTTP 409 - RA duplicado
  */
-app.post('/api/alunos', (req, res) => {
+app.post('/api/alunos', autorizar('admin'), (req, res) => {
 
   /*
    * DESESTRUTURAÇÃO
@@ -313,7 +342,7 @@ app.post('/api/alunos', (req, res) => {
  * Recebe os novos dados de um aluno
  * e atualiza seu registro no array.
  */
-app.put('/api/alunos/:id', (req, res) => {
+app.put('/api/alunos/:id', autorizar('admin'), (req, res) => {
 
   // Obtém o ID informado na URL.
   const id = Number(req.params.id);
@@ -365,7 +394,7 @@ app.put('/api/alunos/:id', (req, res) => {
  *
  * Remove um aluno do array.
  */
-app.delete('/api/alunos/:id', (req, res) => {
+app.delete('/api/alunos/:id', autorizar('admin'), (req, res) => {
 
   // Obtém o identificador.
   const id = Number(req.params.id);
