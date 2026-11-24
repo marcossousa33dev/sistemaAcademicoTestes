@@ -1,8 +1,8 @@
-# API Acadêmica — Capítulo 8
+# API Acadêmica — Capítulo 9
 
-## Autenticação e autorização
+## Inspeção passiva
 
-Verifique o login, a consulta com perfil leitor e as operações de escrita com perfil administrador. A partir desta aula a coleção de consultas precisa de Bearer Token na listagem de alunos.
+Realize as requisições da atividade no laboratório local e registre os alertas passivos. Para cada alerta, documente rota, evidência, impacto e conclusão.
 
 Instale as dependências com `npm ci` e execute `node app.js`. A API atende em `http://127.0.0.1:3000`.
 
