@@ -194,7 +194,7 @@ app.post('/api/alunos', (req, res) => {
    * Extrai os campos enviados no
    * corpo da requisição HTTP.
    */
-  const { ra, nome, email, curso } = req.body;
+  const { ra, nome, email, curso } = req.body || {};
 
   /*
    * VALIDAÇÃO DOS CAMPOS
@@ -262,6 +262,119 @@ app.post('/api/alunos', (req, res) => {
    */
   res.status(201).json(novoAluno);
 
+});
+
+/*
+ * ENDPOINT 05 - ATUALIZAR ALUNO
+ *
+ * Método: PUT
+ * Rota: /api/alunos/:id
+ *
+ * Recebe os novos dados de um aluno
+ * e atualiza seu registro no array.
+ */
+app.put('/api/alunos/:id', (req, res) => {
+
+  // Obtém o ID informado na URL.
+  const id = Number(req.params.id);
+
+  // Procura o aluno pelo identificador.
+  const aluno = alunos.find(a => a.id === id);
+
+  // Verifica se o aluno existe.
+  if (!aluno) {
+    return res.status(404).json({
+      erro: 'Aluno não encontrado'
+    });
+  }
+
+  // Recebe os novos dados enviados em JSON.
+  const { ra, nome, email, curso } = req.body || {};
+
+  /*
+   * VALIDAÇÃO DOS CAMPOS
+   *
+   * Verifica se todos os campos:
+   * - São do tipo string;
+   * - Possuem algum conteúdo;
+   * - Não contêm apenas espaços.
+   */
+  if (
+    typeof ra !== 'string' || !ra.trim() ||
+    typeof nome !== 'string' || !nome.trim() ||
+    typeof email !== 'string' || !email.trim() ||
+    typeof curso !== 'string' || !curso.trim()
+  ) {
+
+    // Retorna erro HTTP 400.
+    return res.status(400).json({
+      erro: 'Campos obrigatórios inválidos'
+    });
+  }
+
+  // Verifica se outro aluno já possui o RA.
+  const raDuplicado = alunos.some(
+    a => a.ra === ra && a.id !== id
+  );
+
+  if (raDuplicado) {
+    return res.status(409).json({
+      erro: 'RA já cadastrado'
+    });
+  }
+
+  // Atualiza as propriedades do aluno.
+  aluno.ra = ra;
+  aluno.nome = nome;
+  aluno.email = email;
+  aluno.curso = curso;
+
+  // Retorna o registro atualizado.
+  res.status(200).json(aluno);
+});
+
+
+/*
+ * ENDPOINT 06 - EXCLUIR ALUNO
+ *
+ * Método: DELETE
+ * Rota: /api/alunos/:id
+ *
+ * Remove um aluno do array.
+ */
+app.delete('/api/alunos/:id', (req, res) => {
+
+  // Obtém o identificador.
+  const id = Number(req.params.id);
+
+  /*
+   * findIndex() retorna a posição
+   * do aluno no array.
+   *
+   * Se não encontrar, retorna -1.
+   */
+  const indice = alunos.findIndex(
+    a => a.id === id
+  );
+
+  // Verifica se o registro existe.
+  if (indice === -1) {
+    return res.status(404).json({
+      erro: 'Aluno não encontrado'
+    });
+  }
+
+  /*
+   * splice() remove um elemento
+   * a partir da posição informada.
+   */
+  alunos.splice(indice, 1);
+
+  /*
+   * HTTP 204 informa que a operação
+   * foi concluída sem conteúdo.
+   */
+  return res.status(204).send();
 });
 
 /*
