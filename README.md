@@ -1,8 +1,8 @@
-# API Acadêmica — Capítulo 11
+# API Acadêmica — Capítulo 12
 
-## Carga autenticada
+## Estresse e recuperação
 
-Defina a variável de ambiente K6_SENHA_LEITOR com a senha didática do leitor. Com a API local em execução, execute `k6 run test/k6/carga-autenticada.js` e registre os resultados da atividade.
+Com a API local em execução, execute `k6 run test/k6/estresse-controlado.js` e registre os resultados da atividade.
 
 Instale as dependências com `npm ci` e execute `node app.js`. A API atende em `http://127.0.0.1:3000`.
 
