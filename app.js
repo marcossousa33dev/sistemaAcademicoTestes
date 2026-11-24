@@ -73,6 +73,63 @@ const alunos = [
 let proximoId = 3;
 
 /*
+ * Valida os dados de um aluno.
+ *
+ * Retorna null quando os dados são válidos.
+ * Caso contrário, retorna uma mensagem.
+ */
+function validarAluno(dados) {
+
+  // Evita acessar propriedades de valores nulos.
+  if (!dados || typeof dados !== 'object' ||
+      Array.isArray(dados)) {
+    return 'Corpo JSON inválido';
+  }
+
+  const { ra, nome, email, curso } = dados;
+
+  // Confere os tipos dos campos.
+  if (
+    typeof ra !== 'string' ||
+    typeof nome !== 'string' ||
+    typeof email !== 'string' ||
+    typeof curso !== 'string'
+  ) {
+    return 'Os campos devem ser textos';
+  }
+
+  // Remove espaços nas extremidades.
+  const nomeLimpo = nome.trim();
+
+  // Verifica campos obrigatórios.
+  if (
+    !ra.trim() ||
+    !nomeLimpo ||
+    !email.trim() ||
+    !curso.trim()
+  ) {
+    return 'Todos os campos são obrigatórios';
+  }
+
+  // Verifica o tamanho do nome.
+  if (nomeLimpo.length < 3 ||
+      nomeLimpo.length > 100) {
+    return 'Nome deve ter entre 3 e 100 caracteres';
+  }
+
+  // Validação didática de formato de e-mail.
+  const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!formatoEmail.test(email.trim())) {
+    return 'Formato de e-mail inválido';
+  }
+
+  // Nenhum problema encontrado.
+  return null;
+}
+
+
+/*
  * ENDPOINT 01 - VERIFICAR SERVIDOR
  *
  * Método: GET
@@ -194,28 +251,11 @@ app.post('/api/alunos', (req, res) => {
    * Extrai os campos enviados no
    * corpo da requisição HTTP.
    */
-  const { ra, nome, email, curso } = req.body || {};
-
-  /*
-   * VALIDAÇÃO DOS CAMPOS
-   *
-   * Verifica se todos os campos:
-   * - São do tipo string;
-   * - Possuem algum conteúdo;
-   * - Não contêm apenas espaços.
-   */
-  if (
-    typeof ra !== 'string' || !ra.trim() ||
-    typeof nome !== 'string' || !nome.trim() ||
-    typeof email !== 'string' || !email.trim() ||
-    typeof curso !== 'string' || !curso.trim()
-  ) {
-
-    // Retorna erro HTTP 400.
-    return res.status(400).json({
-      erro: 'Campos obrigatórios inválidos'
-    });
+  const erro = validarAluno(req.body);
+  if (erro) {
+    return res.status(400).json({ erro });
   }
+  const { ra, nome, email, curso } = req.body;
 
   /*
    * VERIFICAÇÃO DE RA DUPLICADO
@@ -289,28 +329,11 @@ app.put('/api/alunos/:id', (req, res) => {
   }
 
   // Recebe os novos dados enviados em JSON.
-  const { ra, nome, email, curso } = req.body || {};
-
-  /*
-   * VALIDAÇÃO DOS CAMPOS
-   *
-   * Verifica se todos os campos:
-   * - São do tipo string;
-   * - Possuem algum conteúdo;
-   * - Não contêm apenas espaços.
-   */
-  if (
-    typeof ra !== 'string' || !ra.trim() ||
-    typeof nome !== 'string' || !nome.trim() ||
-    typeof email !== 'string' || !email.trim() ||
-    typeof curso !== 'string' || !curso.trim()
-  ) {
-
-    // Retorna erro HTTP 400.
-    return res.status(400).json({
-      erro: 'Campos obrigatórios inválidos'
-    });
+  const erro = validarAluno(req.body);
+  if (erro) {
+    return res.status(400).json({ erro });
   }
+  const { ra, nome, email, curso } = req.body;
 
   // Verifica se outro aluno já possui o RA.
   const raDuplicado = alunos.some(
@@ -375,6 +398,24 @@ app.delete('/api/alunos/:id', (req, res) => {
    * foi concluída sem conteúdo.
    */
   return res.status(204).send();
+});
+
+/*
+ * Middleware de tratamento de erros.
+ *
+ * Recebe erros encaminhados pelo Express
+ * ou por outras funções do servidor.
+ */
+app.use((err, req, res, next) => {
+
+  // Registra o problema no servidor.
+  console.error(err);
+
+  // Retorna uma mensagem genérica ao cliente.
+  res.status(500).json({
+    erro: 'Erro interno do servidor'
+  });
+
 });
 
 /*
