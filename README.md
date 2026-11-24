@@ -1,8 +1,8 @@
-# API Acadêmica — Capítulo 9
+# API Acadêmica — Capítulo 10
 
-## Inspeção passiva
+## Carga básica
 
-Realize as requisições da atividade no laboratório local e registre os alertas passivos. Para cada alerta, documente rota, evidência, impacto e conclusão.
+Com a API local em execução, execute `k6 run test/k6/carga-basica.js` e registre os resultados da atividade.
 
 Instale as dependências com `npm ci` e execute `node app.js`. A API atende em `http://127.0.0.1:3000`.
 
